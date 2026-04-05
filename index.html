@@ -2,29 +2,45 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>خدماتي</title>
+<title>خدمات الشحن</title>
+
 <style>
 body {
     font-family: Arial;
-    text-align: center;
     background: #0f172a;
     color: white;
+    text-align: center;
+    margin: 0;
 }
+
 .container {
-    margin-top: 50px;
+    margin-top: 40px;
 }
+
+h1 {
+    margin-bottom: 10px;
+}
+
+p {
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
 button {
+    display: block;
+    width: 80%;
+    margin: 15px auto;
     padding: 15px;
-    margin: 10px;
-    width: 200px;
     border: none;
     border-radius: 10px;
     background: #22c55e;
     color: white;
     font-size: 16px;
+    cursor: pointer;
 }
-a {
-    text-decoration: none;
+
+button:hover {
+    background: #16a34a;
 }
 </style>
 </head>
@@ -33,25 +49,17 @@ a {
 
 <div class="container">
     <h1>🔥 خدمات الشحن 🔥</h1>
-
     <p>اختار الباقة واطلب دلوقتي 👇</p>
 
-    <a href="https://wa.me/201227115782">
-        <button>باقة 40 جنيه</button>
-    </a>
+    <button onclick="alert('تم اختيار باقة 40 جنيه')">باقة 40 جنيه</button>
 
-    <a href="https://wa.me/201227115782">
-        <button>باقة 50 جنيه</button>
-    </a>
+    <button onclick="alert('تم اختيار باقة 50 جنيه')">باقة 50 جنيه</button>
 
-    <a href="https://wa.me/201227115782">
-        <button>باقة 60 جنيه</button>
-    </a>
+    <button onclick="alert('تم اختيار باقة 60 جنيه')">باقة 60 جنيه</button>
 
-    <a href="https://wa.me/201227115782">
-        <button>تواصل واتساب</button>
-    </a>
-
+    <button onclick="window.location.href='https://wa.me/201227115782'">
+        تواصل واتساب
+    </button>
 </div>
 
 </body>
