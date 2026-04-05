@@ -4,9 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>طلب باقة</title><style>
 
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -57,15 +55,11 @@ button {
     border-radius: 10px;
     border: none;
     font-size: 15px;
+    cursor: pointer;
 }
 
 .btn-green {
     background: #22c55e;
-    color: white;
-}
-
-.btn-dark {
-    background: #334155;
     color: white;
 }
 
@@ -108,44 +102,27 @@ ${userName}
 📱 الرقم
 ${userPhone}
 
-📦 الباقة
 ${selectedPackage}
 `;
 }
 
-function openWhats() {
-    window.open("https://wa.me/201227115782");
-}
+function sendWhatsApp() {
 
-function sendToTelegram(btn) {
+    let message = `
+طلب جديد
 
-    let token = "8503388702:AAELn2ss_kjjPG2c3An1Hrt0PNLMXwzMRBI";
-    let chat_id = "5613451219";
+الاسم
+${userName}
 
-    let text = document.getElementById("orderText").innerText;
+الرقم
+${userPhone}
 
-    btn.disabled = true;
-    btn.innerText = "جاري الإرسال";
+${selectedPackage}
+`;
 
-    fetch("https://api.telegram.org/bot" + token + "/sendMessage", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            chat_id: chat_id,
-            text: text
-        })
-    })
-    .then(() => {
-        btn.innerText = "تم الإرسال";
-        alert("تم إرسال الطلب بنجاح");
-    })
-    .catch(() => {
-        btn.disabled = false;
-        btn.innerText = "تم الدفع";
-        alert("حصل خطأ حاول تاني");
-    });
+    let url = "https://wa.me/201227115782?text=" + encodeURIComponent(message);
+
+    window.open(url);
 }
 
 </script></head><body><div class="container"><div id="step1"><div class="message">🔥 احجز باقتك الآن
@@ -174,6 +151,8 @@ function sendToTelegram(btn) {
 
 ⏳ احجز مكانك قبل اكتمال العدد
 
+📩 ابعت التفاصيل على واتساب لتأكيد الطلب
+
 💵 رقم الكاش
 01024929685
 
@@ -181,13 +160,7 @@ function sendToTelegram(btn) {
 
 📱 والرقم اللي تم التحويل منه
 
-📋 ابعت كل التفاصيل على واتساب لتأكيد الطلب
-
-✔ بعد التحويل اضغط تم الدفع
-
-</div><div id="orderText" class="message"></div><button class="btn-dark" onclick="openWhats()">
-📩 تواصل واتساب
-</button><button class="btn-green" onclick="sendToTelegram(this)">
-✔ تم الدفع
+</div><div id="orderText" class="message"></div><button class="btn-green" onclick="sendWhatsApp()">
+📩 إرسال الطلب على واتساب
 </button></div></div></body>
 </html>
