@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="ar">
+<!DOCTYPE html><html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>خدمات الشحن</title>
-
-<style>
+<title>طلب باقة</title><style>
 body {
     font-family: Arial;
     background: #0f172a;
@@ -14,53 +11,115 @@ body {
 }
 
 .container {
-    margin-top: 40px;
+    padding: 20px;
 }
 
-h1 {
-    margin-bottom: 10px;
+.box {
+    background: #1e293b;
+    margin: 10px auto;
+    padding: 15px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    cursor: pointer;
+    text-align: right;
 }
 
-p {
-    color: #ccc;
-    margin-bottom: 30px;
+.box:hover {
+    background: #334155;
+}
+
+input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 8px;
+    border: none;
 }
 
 button {
-    display: block;
-    width: 80%;
-    margin: 15px auto;
-    padding: 15px;
+    padding: 12px;
+    width: 90%;
+    margin: 10px;
+    border-radius: 8px;
     border: none;
-    border-radius: 10px;
     background: #22c55e;
     color: white;
     font-size: 16px;
-    cursor: pointer;
 }
 
-button:hover {
-    background: #16a34a;
+.hidden {
+    display: none;
 }
-</style>
-</head>
 
-<body>
+.msg {
+    white-space: pre-line;
+    background: #111827;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+</style><script>
+let selectedPackage = "";
 
-<div class="container">
-    <h1>🔥 خدمات الشحن 🔥</h1>
-    <p>اختار الباقة واطلب دلوقتي 👇</p>
+function choosePackage(pkg) {
+    selectedPackage = pkg;
 
-    <button onclick="alert('تم اختيار باقة 40 جنيه')">باقة 40 جنيه</button>
+    document.getElementById("step1").classList.add("hidden");
+    document.getElementById("step2").classList.remove("hidden");
+}
 
-    <button onclick="alert('تم اختيار باقة 50 جنيه')">باقة 50 جنيه</button>
+function saveData() {
+    let name = document.getElementById("name").value;
+    let phone = document.getElementById("phone").value;
 
-    <button onclick="alert('تم اختيار باقة 60 جنيه')">باقة 60 جنيه</button>
+    if (!name || !phone) {
+        alert("اكتب بياناتك الأول");
+        return;
+    }
 
-    <button onclick="window.location.href='https://wa.me/201227115782'">
-        تواصل واتساب
-    </button>
-</div>
+    document.getElementById("step2").classList.add("hidden");
+    document.getElementById("step3").classList.remove("hidden");
 
-</body>
+    let msg = `📥 طلب جديد
+
+👤 ${name}
+
+📱 ${phone}
+
+${selectedPackage}`;
+
+    document.getElementById("orderDetails").innerText = msg;
+}
+
+function sendWhats() {
+    let text = document.getElementById("orderDetails").innerText;
+    let url = "https://wa.me/201227115782?text=" + encodeURIComponent(text);
+    window.open(url);
+}
+</script></head><body><div class="container"><!-- اختيار الباقة --><div id="step1">
+<h2>🔥 احجز باقتك الآن 🔥</h2><p>📌 التفعيل يوم 16</p>
+<p>⏳ المدة 28 يوم</p><div class="box" onclick="choosePackage('📶 40 جيجا | 1500 دقيقة | 400 جنيه')">
+📶 40 جيجا | 1500 دقيقة | 400 جنيه
+</div><div class="box" onclick="choosePackage('📶 50 جيجا | 1500 دقيقة | 470 جنيه')">
+📶 50 جيجا | 1500 دقيقة | 470 جنيه
+</div><div class="box" onclick="choosePackage('📶 60 جيجا | 1500 دقيقة | 540 جنيه')">
+📶 60 جيجا | 1500 دقيقة | 540 جنيه
+</div><div class="box" onclick="choosePackage('📶 70 جيجا | 1500 دقيقة | 600 جنيه')">
+📶 70 جيجا | 1500 دقيقة | 600 جنيه
+</div></div><!-- إدخال البيانات --><div id="step2" class="hidden">
+<h2>👤 اكتب بياناتك</h2><input id="name" placeholder="اسمك">
+<input id="phone" placeholder="رقمك"><button onclick="saveData()">التالي</button>
+
+</div><!-- الدفع --><div id="step3" class="hidden">
+<h2>💵 طريقة الدفع</h2><div class="msg">
+💵 حول الكاش على الرقم
+01024929685📸 ابعت صورة التحويل
+📱 واكتب الرقم اللي تم التحويل منه
+
+</div><div id="orderDetails" class="msg"></div><button onclick="sendWhats()">📩 ابعت على واتساب</button>
+
+<button onclick="alert('🎉 تم تسجيل طلبك بنجاح')">✔️ تم الدفع</button>
+
+</div></div></body>
 </html>
