@@ -3,7 +3,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>طلب باقة</title><style>
-* { box-sizing: border-box; }
+
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
@@ -23,9 +26,10 @@ body {
     background: #1e293b;
     padding: 18px;
     border-radius: 14px;
-    margin-bottom: 14px;
-    line-height: 2.2;
+    margin-bottom: 16px;
+    line-height: 2.4;
     font-size: 15px;
+    white-space: pre-line;
 }
 
 /* الباقات */
@@ -33,13 +37,13 @@ body {
     background: #22c55e;
     padding: 16px;
     border-radius: 14px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     cursor: pointer;
-    transition: 0.2s;
 }
-.package:hover { opacity: 0.9; }
 
-.package div { margin-bottom: 6px; }
+.package div {
+    margin-bottom: 8px;
+}
 
 /* الإدخال */
 input {
@@ -48,66 +52,73 @@ input {
     margin-top: 10px;
     border-radius: 10px;
     border: none;
-    font-size: 15px;
 }
 
 /* الأزرار */
 button {
     width: 100%;
     padding: 14px;
-    margin-top: 10px;
+    margin-top: 12px;
     border-radius: 10px;
     border: none;
     font-size: 15px;
-    cursor: pointer;
 }
 
-.btn-green { background: #22c55e; color: #fff; }
-.btn-dark  { background: #334155; color: #fff; }
-
-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.btn-green {
+    background: #22c55e;
+    color: white;
 }
 
-.hidden { display: none; }
+.btn-dark {
+    background: #334155;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
 </style><script>
+
 let selectedPackage = "";
 let userName = "";
 let userPhone = "";
 
 /* اختيار باقة */
 function choosePackage(el) {
-    selectedPackage = el.innerText.trim();
+    selectedPackage = el.innerText;
 
     document.getElementById("step1").classList.add("hidden");
     document.getElementById("step2").classList.remove("hidden");
 }
 
-/* التحقق والانتقال */
+/* التالي */
 function nextStep() {
-    userName  = document.getElementById("name").value.trim();
+
+    userName = document.getElementById("name").value.trim();
     userPhone = document.getElementById("phone").value.trim();
 
-    // تحقق بسيط للرقم (أرقام فقط وطول مناسب)
-    if (!userName) {
-        alert("اكتب الاسم");
-        return;
-    }
-    if (!/^[0-9]{10,15}$/.test(userPhone)) {
-        alert("اكتب رقم موبايل صحيح");
+    if (!userName || !userPhone) {
+        alert("اكتب الاسم والرقم");
         return;
     }
 
     document.getElementById("step2").classList.add("hidden");
     document.getElementById("step3").classList.remove("hidden");
 
-    document.getElementById("orderText").innerHTML =
-        "📋 طلب جديد<br><br>" +
-        "👤 الاسم " + userName + "<br><br>" +
-        "📱 الرقم " + userPhone + "<br><br>" +
-        "📦 الباقة<br><br>" +
-        selectedPackage.replace(/\n/g, "<br>");
+    document.getElementById("orderText").innerHTML = `
+📋 طلب جديد
+
+👤 الاسم
+${userName}
+
+📱 الرقم
+${userPhone}
+
+📦 الباقة
+
+${selectedPackage.replace(/\n/g, "<br>")}
+`;
 }
 
 /* واتساب */
@@ -115,10 +126,10 @@ function openWhats() {
     window.open("https://wa.me/201227115782");
 }
 
-/* إرسال للتليجرام */
+/* إرسال تليجرام */
 function sendToTelegram(btn) {
 
-    let token   = "8503388702:AAELn2ss_kjjPG2c3An1Hrt0PNLMXwzMRBI";
+    let token = "8503388702:AAELn2ss_kjjPG2c3An1Hrt0PNLMXwzMRBI";
     let chat_id = "5613451219";
 
     let text = document.getElementById("orderText").innerText;
@@ -128,62 +139,59 @@ function sendToTelegram(btn) {
 
     fetch("https://api.telegram.org/bot" + token + "/sendMessage", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify({
             chat_id: chat_id,
             text: text
         })
     })
-    .then(res => res.ok ? res.json() : Promise.reject())
     .then(() => {
         btn.innerText = "تم الإرسال";
-        alert("تم إرسال الطلب وسيتم المراجعة");
+        alert("تم إرسال الطلب بنجاح");
     })
     .catch(() => {
         btn.disabled = false;
         btn.innerText = "تم الدفع";
-        alert("حصل خطأ حاول مرة تانية");
+        alert("حصل خطأ حاول تاني");
     });
 }
-</script></head><body><div class="container"><!-- البداية --><div id="step1"><div class="message">
-🔥 احجز باقتك الآن  📅 التفعيل يوم 16
+
+</script></head><body><div class="container"><!-- البداية --><div id="step1"><div class="message">🔥 احجز باقتك الآن
+
+📅 التفعيل يوم 16
 
 ⏳ المدة 28 يوم
 
 👇 اختار الباقة
 
-</div><div class="package" onclick="choosePackage(this)">
-<div>📶 40 جيجا</div>
+</div><div class="package" onclick="choosePackage(this)"><div>📶 40 جيجا</div>
 <div>📞 1500 دقيقة</div>
-<div>💰 400 جنيه</div>
-</div><div class="package" onclick="choosePackage(this)">
-<div>📶 50 جيجا</div>
+<div>💰 400 جنيه</div></div><div class="package" onclick="choosePackage(this)"><div>📶 50 جيجا</div>
 <div>📞 1500 دقيقة</div>
-<div>💰 470 جنيه</div>
-</div><div class="package" onclick="choosePackage(this)">
-<div>📶 60 جيجا</div>
+<div>💰 470 جنيه</div></div><div class="package" onclick="choosePackage(this)"><div>📶 60 جيجا</div>
 <div>📞 1500 دقيقة</div>
-<div>💰 540 جنيه</div>
-</div><div class="package" onclick="choosePackage(this)">
-<div>📶 70 جيجا</div>
+<div>💰 540 جنيه</div></div><div class="package" onclick="choosePackage(this)"><div>📶 70 جيجا</div>
 <div>📞 1500 دقيقة</div>
-<div>💰 600 جنيه</div>
-</div></div><!-- البيانات --><div id="step2" class="hidden"><div class="message">
+<div>💰 600 جنيه</div></div></div><!-- البيانات --><div id="step2" class="hidden"><div class="message">
 👤 اكتب اسمك
 </div><input id="name" placeholder="الاسم"><div class="message">
 📱 اكتب رقمك
 </div><input id="phone" placeholder="رقم الموبايل"><button class="btn-green" onclick="nextStep()">
 التالي
-</button></div><!-- الدفع --><div id="step3" class="hidden"><div class="message">
-✅ تم تسجيل طلبك  ⏳ احجز مكانك قبل اكتمال العدد
+</button></div><!-- الدفع --><div id="step3" class="hidden"><div class="message">✅ تم تسجيل طلبك
+
+⏳ احجز مكانك قبل اكتمال العدد
 
 💵 حول الكاش على الرقم ده
 01024929685
 
 📸 ابعت صورة التحويل
+
 📱 والرقم اللي تم التحويل منه
 
-📋 ابعت التفاصيل على واتساب لتأكيد الطلب
+📋 ابعت كل التفاصيل على واتساب لتأكيد الطلب
 
 ✔ بعد التحويل اضغط تم الدفع
 
