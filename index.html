@@ -1,125 +1,164 @@
 <!DOCTYPE html><html lang="ar">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>طلب باقة</title><style>
 body {
     font-family: Arial;
     background: #0f172a;
     color: white;
-    text-align: center;
-    margin: 0;
+    padding: 15px;
 }
 
 .container {
-    padding: 20px;
+    max-width: 400px;
+    margin: auto;
 }
 
 .box {
     background: #1e293b;
-    margin: 10px auto;
     padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    text-align: right;
+    line-height: 2;
+}
+
+.package {
+    background: #22c55e;
+    padding: 12px;
     border-radius: 10px;
-    width: 90%;
-    max-width: 400px;
+    margin: 6px 0;
     cursor: pointer;
     text-align: right;
 }
 
-.box:hover {
-    background: #334155;
+.package div {
+    margin: 3px 0;
 }
 
 input {
-    width: 90%;
+    width: 100%;
     padding: 12px;
-    margin: 10px;
-    border-radius: 8px;
+    margin-top: 10px;
+    border-radius: 10px;
     border: none;
 }
 
 button {
+    width: 100%;
     padding: 12px;
-    width: 90%;
-    margin: 10px;
-    border-radius: 8px;
+    margin-top: 10px;
+    border-radius: 10px;
     border: none;
-    background: #22c55e;
-    color: white;
     font-size: 16px;
 }
 
-.hidden {
-    display: none;
-}
+.green { background: #22c55e; color: white; }
+.dark { background: #334155; color: white; }
 
-.msg {
-    white-space: pre-line;
-    background: #111827;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 10px;
-}
+.hidden { display: none; }
 </style><script>
 let selectedPackage = "";
+let userName = "";
+let userPhone = "";
 
 function choosePackage(pkg) {
     selectedPackage = pkg;
-
-    document.getElementById("step1").classList.add("hidden");
-    document.getElementById("step2").classList.remove("hidden");
+    document.getElementById("packages").classList.add("hidden");
+    document.getElementById("form").classList.remove("hidden");
 }
 
-function saveData() {
-    let name = document.getElementById("name").value;
-    let phone = document.getElementById("phone").value;
+function nextStep() {
+    userName = document.getElementById("name").value;
+    userPhone = document.getElementById("phone").value;
 
-    if (!name || !phone) {
-        alert("اكتب بياناتك الأول");
+    if (!userName || !userPhone) {
+        alert("اكتب البيانات");
         return;
     }
 
-    document.getElementById("step2").classList.add("hidden");
-    document.getElementById("step3").classList.remove("hidden");
+    document.getElementById("form").classList.add("hidden");
+    document.getElementById("payment").classList.remove("hidden");
 
-    let msg = `📥 طلب جديد
-
-👤 ${name}
-
-📱 ${phone}
-
-${selectedPackage}`;
-
-    document.getElementById("orderDetails").innerText = msg;
+    document.getElementById("orderText").innerHTML =
+    "📥 طلب جديد<br><br>" +
+    "👤 الاسم: " + userName + "<br>" +
+    "📱 الرقم: " + userPhone + "<br><br>" +
+    "📦 الباقة:<br>" + selectedPackage;
 }
 
+/* واتساب */
 function sendWhats() {
-    let text = document.getElementById("orderDetails").innerText;
-    let url = "https://wa.me/201227115782?text=" + encodeURIComponent(text);
-    window.open(url);
+    let text = document.getElementById("orderText").innerText;
+    window.open("https://wa.me/201227115782?text=" + encodeURIComponent(text));
 }
-</script></head><body><div class="container"><!-- اختيار الباقة --><div id="step1">
-<h2>🔥 احجز باقتك الآن 🔥</h2><p>📌 التفعيل يوم 16</p>
-<p>⏳ المدة 28 يوم</p><div class="box" onclick="choosePackage('📶 40 جيجا | 1500 دقيقة | 400 جنيه')">
-📶 40 جيجا | 1500 دقيقة | 400 جنيه
-</div><div class="box" onclick="choosePackage('📶 50 جيجا | 1500 دقيقة | 470 جنيه')">
-📶 50 جيجا | 1500 دقيقة | 470 جنيه
-</div><div class="box" onclick="choosePackage('📶 60 جيجا | 1500 دقيقة | 540 جنيه')">
-📶 60 جيجا | 1500 دقيقة | 540 جنيه
-</div><div class="box" onclick="choosePackage('📶 70 جيجا | 1500 دقيقة | 600 جنيه')">
-📶 70 جيجا | 1500 دقيقة | 600 جنيه
-</div></div><!-- إدخال البيانات --><div id="step2" class="hidden">
-<h2>👤 اكتب بياناتك</h2><input id="name" placeholder="اسمك">
-<input id="phone" placeholder="رقمك"><button onclick="saveData()">التالي</button>
 
-</div><!-- الدفع --><div id="step3" class="hidden">
-<h2>💵 طريقة الدفع</h2><div class="msg">
-💵 حول الكاش على الرقم
-01024929685📸 ابعت صورة التحويل
-📱 واكتب الرقم اللي تم التحويل منه
+/* تليجرام */
+function sendToTelegram() {
 
-</div><div id="orderDetails" class="msg"></div><button onclick="sendWhats()">📩 ابعت على واتساب</button>
+let token = "TOKEN_HERE";   // 👈 8503388702:AAELn2ss_kjjPG2c3An1Hrt0PNLMXwzMRBI
+let chat_id = "CHAT_ID_HERE"; // 👈 5613451219
 
-<button onclick="alert('🎉 تم تسجيل طلبك بنجاح')">✔️ تم الدفع</button>
+let text = document.getElementById("orderText").innerText;
+
+fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+chat_id: chat_id,
+text: text
+})
+})
+.then(() => {
+alert("✅ تم إرسال الطلب على التليجرام");
+});
+}
+</script></head><body><div class="container"><div class="box">
+🔥 احجز باقتك الآن  📌 التفعيل: يوم 16
+⏳ المدة: 28 يوم
+
+👇 اختار الباقة
+
+</div><div id="packages"><div class="package" onclick="choosePackage(this.innerHTML)">
+<div>📶 40 جيجا</div>
+<div>📞 1500 دقيقة</div>
+<div>💰 400 جنيه</div>
+</div><div class="package" onclick="choosePackage(this.innerHTML)">
+<div>📶 50 جيجا</div>
+<div>📞 1500 دقيقة</div>
+<div>💰 470 جنيه</div>
+</div><div class="package" onclick="choosePackage(this.innerHTML)">
+<div>📶 60 جيجا</div>
+<div>📞 1500 دقيقة</div>
+<div>💰 540 جنيه</div>
+</div><div class="package" onclick="choosePackage(this.innerHTML)">
+<div>📶 70 جيجا</div>
+<div>📞 1500 دقيقة</div>
+<div>💰 600 جنيه</div>
+</div></div><div id="form" class="hidden"><div class="box">👤 اكتب اسمك</div>
+<input id="name"><div class="box">📱 اكتب رقمك</div>
+<input id="phone"><button class="green" onclick="nextStep()">التالي</button>
+
+</div><div id="payment" class="hidden"><div class="box">
+✔ تم تسجيل طلبك بنجاح  ⏳ احجز مكانك قبل اكتمال العدد
+
+💳 فودافون كاش
+01024929685
+
+📸 ابعت صورة التحويل
+
+📱 وابعت رقم المرسل
+
+📋 ابعت كل التفاصيل على واتساب
+
+✔ بعد التحويل اضغط تم الدفع
+
+</div><div id="orderText" class="box"></div><button class="dark" onclick="sendWhats()">📩 تواصل واتساب</button>
+
+<button class="green" onclick="sendToTelegram()">✔ تم الدفع</button>
 
 </div></div></body>
 </html>
