@@ -1,47 +1,48 @@
-<!DOCTYPE html><html lang="ar">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>طلب باقة</title><style>
+* { box-sizing: border-box; }
 
 body {
-    font-family: Tahoma;
-    background: #0b1220;
-    color: white;
+    margin: 0;
+    font-family: Tahoma, sans-serif;
+    background: #0f172a;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 420px;
+    margin: auto;
     padding: 20px;
 }
 
-/* كل رسالة */
+/* الرسائل */
 .message {
     background: #1e293b;
-    padding: 20px;
+    padding: 18px;
     border-radius: 14px;
-    margin-bottom: 15px;
-    line-height: 2.4;
-    text-align: right;
+    margin-bottom: 14px;
+    line-height: 2.2;
+    font-size: 15px;
 }
 
 /* الباقات */
 .package {
     background: #22c55e;
-    padding: 18px;
+    padding: 16px;
     border-radius: 14px;
     margin-bottom: 10px;
     cursor: pointer;
-    text-align: right;
+    transition: 0.2s;
 }
+.package:hover { opacity: 0.9; }
 
-/* إدخال */
+.package div { margin-bottom: 6px; }
+
+/* الإدخال */
 input {
-    width: 100%;
-    padding: 14px;
-    margin-top: 10px;
-    border-radius: 10px;
-    border: none;
-}
-
-/* زر */
-button {
     width: 100%;
     padding: 14px;
     margin-top: 10px;
@@ -50,119 +51,145 @@ button {
     font-size: 15px;
 }
 
-.green {
-    background: #22c55e;
-    color: white;
+/* الأزرار */
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
 }
 
-.dark {
-    background: #334155;
-    color: white;
+.btn-green { background: #22c55e; color: #fff; }
+.btn-dark  { background: #334155; color: #fff; }
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
-.hidden {
-    display: none;
-}
-
+.hidden { display: none; }
 </style><script>
-
 let selectedPackage = "";
-let name = "";
-let phone = "";
+let userName = "";
+let userPhone = "";
 
-function choosePackage(pkg) {
-    selectedPackage = pkg;
+/* اختيار باقة */
+function choosePackage(el) {
+    selectedPackage = el.innerText.trim();
 
     document.getElementById("step1").classList.add("hidden");
     document.getElementById("step2").classList.remove("hidden");
 }
 
+/* التحقق والانتقال */
 function nextStep() {
-    name = document.getElementById("name").value;
-    phone = document.getElementById("phone").value;
+    userName  = document.getElementById("name").value.trim();
+    userPhone = document.getElementById("phone").value.trim();
 
-    if (!name || !phone) {
-        alert("اكتب البيانات");
+    // تحقق بسيط للرقم (أرقام فقط وطول مناسب)
+    if (!userName) {
+        alert("اكتب الاسم");
+        return;
+    }
+    if (!/^[0-9]{10,15}$/.test(userPhone)) {
+        alert("اكتب رقم موبايل صحيح");
         return;
     }
 
     document.getElementById("step2").classList.add("hidden");
     document.getElementById("step3").classList.remove("hidden");
 
-    document.getElementById("order").innerHTML =
-        "طلب جديد<br><br>" +
-        "الاسم " + name + "<br><br>" +
-        "الرقم " + phone + "<br><br>" +
-        "الباقة<br><br>" +
-        selectedPackage;
+    document.getElementById("orderText").innerHTML =
+        "📋 طلب جديد<br><br>" +
+        "👤 الاسم " + userName + "<br><br>" +
+        "📱 الرقم " + userPhone + "<br><br>" +
+        "📦 الباقة<br><br>" +
+        selectedPackage.replace(/\n/g, "<br>");
 }
 
-function sendTelegram() {
+/* واتساب */
+function openWhats() {
+    window.open("https://wa.me/201227115782");
+}
 
-    let token = "8503388702:AAELn2ss_kjjPG2c3An1Hrt0PNLMXwzMRBI";
+/* إرسال للتليجرام */
+function sendToTelegram(btn) {
+
+    let token   = "8503388702:AAELn2ss_kjjPG2c3An1Hrt0PNLMXwzMRBI";
     let chat_id = "5613451219";
 
-    let text = document.getElementById("order").innerText;
+    let text = document.getElementById("orderText").innerText;
+
+    btn.disabled = true;
+    btn.innerText = "جاري الإرسال";
 
     fetch("https://api.telegram.org/bot" + token + "/sendMessage", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             chat_id: chat_id,
             text: text
         })
+    })
+    .then(res => res.ok ? res.json() : Promise.reject())
+    .then(() => {
+        btn.innerText = "تم الإرسال";
+        alert("تم إرسال الطلب وسيتم المراجعة");
+    })
+    .catch(() => {
+        btn.disabled = false;
+        btn.innerText = "تم الدفع";
+        alert("حصل خطأ حاول مرة تانية");
     });
-
-    alert("تم إرسال الطلب");
 }
+</script></head><body><div class="container"><!-- البداية --><div id="step1"><div class="message">
+🔥 احجز باقتك الآن  📅 التفعيل يوم 16
 
-</script></head><body><!-- البداية --><div id="step1"><div class="message">احجز باقتك الآن
+⏳ المدة 28 يوم
 
-التفعيل يوم 16
+👇 اختار الباقة
 
-المدة 28 يوم
-
-اختار الباقة
-
-</div><div class="package" onclick="choosePackage(this.innerHTML)">
-40 جيجا  
-1500 دقيقة  
-400 جنيه
-</div><div class="package" onclick="choosePackage(this.innerHTML)">
-50 جيجا  
-1500 دقيقة  
-470 جنيه
-</div><div class="package" onclick="choosePackage(this.innerHTML)">
-60 جيجا  
-1500 دقيقة  
-540 جنيه
-</div><div class="package" onclick="choosePackage(this.innerHTML)">
-70 جيجا  
-1500 دقيقة  
-600 جنيه
-</div></div><!-- الاسم والرقم --><div id="step2" class="hidden"><div class="message">
-اكتب اسمك
-</div><input id="name"><div class="message">
-اكتب رقمك
-</div><input id="phone"><button class="green" onclick="nextStep()">
+</div><div class="package" onclick="choosePackage(this)">
+<div>📶 40 جيجا</div>
+<div>📞 1500 دقيقة</div>
+<div>💰 400 جنيه</div>
+</div><div class="package" onclick="choosePackage(this)">
+<div>📶 50 جيجا</div>
+<div>📞 1500 دقيقة</div>
+<div>💰 470 جنيه</div>
+</div><div class="package" onclick="choosePackage(this)">
+<div>📶 60 جيجا</div>
+<div>📞 1500 دقيقة</div>
+<div>💰 540 جنيه</div>
+</div><div class="package" onclick="choosePackage(this)">
+<div>📶 70 جيجا</div>
+<div>📞 1500 دقيقة</div>
+<div>💰 600 جنيه</div>
+</div></div><!-- البيانات --><div id="step2" class="hidden"><div class="message">
+👤 اكتب اسمك
+</div><input id="name" placeholder="الاسم"><div class="message">
+📱 اكتب رقمك
+</div><input id="phone" placeholder="رقم الموبايل"><button class="btn-green" onclick="nextStep()">
 التالي
-</button></div><!-- الدفع --><div id="step3" class="hidden"><div class="message">تم تسجيل طلبك
+</button></div><!-- الدفع --><div id="step3" class="hidden"><div class="message">
+✅ تم تسجيل طلبك  ⏳ احجز مكانك قبل اكتمال العدد
 
-احجز مكانك قبل اكتمال العدد
-
-حول الكاش على الرقم ده
+💵 حول الكاش على الرقم ده
 01024929685
 
-ابعت صورة التحويل
-والرقم اللي تم التحويل منه
+📸 ابعت صورة التحويل
+📱 والرقم اللي تم التحويل منه
 
-وابعت كل التفاصيل على واتساب لتأكيد الطلب
+📋 ابعت التفاصيل على واتساب لتأكيد الطلب
 
-بعد التحويل اضغط تم الدفع
+✔ بعد التحويل اضغط تم الدفع
 
-</div><div id="order" class="message"></div><button class="dark" onclick="window.open('https://wa.me/201227115782')">
-تواصل واتساب
-</button><button class="green" onclick="sendTelegram()">
-تم الدفع
-</button></div></body>
+</div><div id="orderText" class="message"></div><button class="btn-dark" onclick="openWhats()">
+📩 تواصل واتساب
+</button><button class="btn-green" onclick="sendToTelegram(this)">
+✔ تم الدفع
+</button></div></div></body>
 </html>
